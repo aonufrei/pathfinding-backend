@@ -23,17 +23,18 @@ public class AStarAlgorithm<T> implements PathFindingAlgorithm<T> {
 		ShortestPath<T> shortestPath = new ShortestPath<>();
 		LinkedList<IterationChanges<T>> iterationChanges = new LinkedList<>();
 		Node<T> startNode = new Node<>(start, 0, mapService.distanceBetweenVertex(start, finish), null);
-		Queue<Node<T>> q = new PriorityQueue<>(Comparator.comparingDouble(node -> node.getPrice()));//Comparator.comparing(Node::getPrice));
+		Queue<Node<T>> q = new PriorityQueue<>(Comparator.comparingDouble(Node::getPrice));
 		q.add(startNode);
 		iterationChanges.add(IterationChanges.createProcessingIteration(Collections.singletonList(start)));
 		Set<T> visited = new HashSet<>();
 		while (!q.isEmpty()) {
 			IterationChanges<T> iteration = new IterationChanges<>();
 			Node<T> currentNode = q.poll();
-			if (currentNode != null) {
-				iteration.getAreAlreadyProcessed().add(currentNode.getVertex());
-				visited.add(currentNode.getVertex());
+			if (currentNode == null) {
+				break;
 			}
+			iteration.getAreAlreadyProcessed().add(currentNode.getVertex());
+			visited.add(currentNode.getVertex());
 			T currentVertex = currentNode.getVertex();
 			List<Node<T>> neighbours = mapService.findNeighboursOfVertex(currentVertex).stream()
 					.filter(v -> !visited.contains(v))
@@ -63,13 +64,6 @@ public class AStarAlgorithm<T> implements PathFindingAlgorithm<T> {
 			points.addFirst(node.getVertex());
 		}
 		return points;
-	}
-
-	public static void main(String[] args) {
-//		PathFindingAlgorithm<Point2d> algorithm = new AStarAlgorithm<>();
-//		List<Point2d> shortestPath = algorithm.findShortestPath(new Point2d(0, 0), new Point2d(7, 3), new Point2dUtils());
-//		shortestPath.forEach(p -> System.out.printf("%s; ", p));
-//		System.out.println();
 	}
 
 }

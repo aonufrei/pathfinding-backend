@@ -6,8 +6,4 @@ public class PathfindingRequestValidationException extends RuntimeException {
 		super(message);
 	}
 
-	public PathfindingRequestValidationException(String message, Throwable cause) {
-		super(message, cause);
-	}
-
 }

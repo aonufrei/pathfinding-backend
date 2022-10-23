@@ -15,6 +15,8 @@ public class Node<T> {
 
 	private double price = 0;
 
+	private double distanceToFinish = Double.POSITIVE_INFINITY;
+
 	private Node<T> parent;
 
 	public Node(T vertex, Node<T> parent) {

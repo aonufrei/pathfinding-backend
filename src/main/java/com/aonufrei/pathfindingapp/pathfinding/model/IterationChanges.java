@@ -17,7 +17,6 @@ public class IterationChanges<T> {
 
 	private List<T> areAlreadyProcessed = new LinkedList<>();
 
-	private List<T> route = new LinkedList<>();
 
 	public static <T> IterationChanges<T> createProcessingIteration(Collection<T> points) {
 		IterationChanges<T> nIterationChanges = new IterationChanges<>();
@@ -29,12 +28,6 @@ public class IterationChanges<T> {
 		IterationChanges<T> nIterationChanges = new IterationChanges<>();
 		nIterationChanges.getAreProcessing().addAll(processing);
 		nIterationChanges.getAreAlreadyProcessed().addAll(processed);
-		return nIterationChanges;
-	}
-
-	public static <T> IterationChanges<T> createRouteIteration(Collection<T> route) {
-		IterationChanges<T> nIterationChanges = new IterationChanges<>();
-		nIterationChanges.getRoute().addAll(route);
 		return nIterationChanges;
 	}
 }

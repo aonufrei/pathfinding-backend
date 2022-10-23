@@ -1,9 +1,11 @@
 package com.aonufrei.pathfindingapp.pathfinding.algorithm;
 
-import java.util.List;
+import com.aonufrei.pathfindingapp.dto.ShortestPath;
+import com.aonufrei.pathfindingapp.exception.NoPathWasFoundException;
+import com.aonufrei.pathfindingapp.pathfinding.service.MapService;
 
 public interface PathFindingAlgorithm<T> {
 
-	List<T> findShortestPath(T start, T finish, PointUtils<T> pointUtils);
+	ShortestPath<T> findShortestPath(T start, T finish, MapService<T> mapService) throws NoPathWasFoundException;
 
 }

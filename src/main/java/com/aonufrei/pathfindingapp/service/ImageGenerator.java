@@ -29,37 +29,37 @@ public class ImageGenerator {
 	private static final int FINISH_COLOR = rgb(0, 0, 255);
 
 	private static final Point2dUtils point2dUtils = new Point2dUtils();
-	public void createFramesAndSave() {
-		AStarAlgorithm<Point2d> algorithm = new AStarAlgorithm<>();
-		algorithm.findShortestPath(new Point2d(0, 0), new Point2d(7, 3), point2dUtils);
-		List<IterationChanges<Point2d>> algorithmIterations = algorithm.getLastIterationChanges();
-
-		int width = 12, height = 7;
-
-		List<BufferedImage> frames = new LinkedList<>();
-		for (int i = 0; i < algorithmIterations.size(); i++) {
-			BufferedImage prevBufferedImage = null;
-			if (i != 0) {
-				prevBufferedImage = frames.get(i - 1);
-			}
-			frames.add(drawImage(width, height, algorithmIterations.get(i), prevBufferedImage));
-		}
-
-		frames.forEach(bi -> {
-			bi.setRGB(3, 4, START_COLOR);
-			bi.setRGB(10, 1, FINISH_COLOR);
-		});
-
-		frames.forEach(forEachWithIndex((i, bi) -> {
-			try {
-				File f = new File(String.format("D:\\frames\\frame_%d.png", i));
-				ImageIO.write(bi, "png", f);
-			}
-			catch (IOException e) {
-				System.out.println("Error: " + e);
-			}
-		}));
-	}
+//	public void createFramesAndSave() {
+//		AStarAlgorithm<Point2d> algorithm = new AStarAlgorithm<>();
+//		algorithm.findShortestPath(new Point2d(0, 0), new Point2d(7, 3), );
+//		List<IterationChanges<Point2d>> algorithmIterations = algorithm.getLastIterationChanges();
+//
+//		int width = 12, height = 7;
+//
+//		List<BufferedImage> frames = new LinkedList<>();
+//		for (int i = 0; i < algorithmIterations.size(); i++) {
+//			BufferedImage prevBufferedImage = null;
+//			if (i != 0) {
+//				prevBufferedImage = frames.get(i - 1);
+//			}
+//			frames.add(drawImage(width, height, algorithmIterations.get(i), prevBufferedImage));
+//		}
+//
+//		frames.forEach(bi -> {
+//			bi.setRGB(3, 4, START_COLOR);
+//			bi.setRGB(10, 1, FINISH_COLOR);
+//		});
+//
+//		frames.forEach(forEachWithIndex((i, bi) -> {
+//			try {
+//				File f = new File(String.format("D:\\frames\\frame_%d.png", i));
+//				ImageIO.write(bi, "png", f);
+//			}
+//			catch (IOException e) {
+//				System.out.println("Error: " + e);
+//			}
+//		}));
+//	}
 
 	private <T> Consumer<T> forEachWithIndex(BiConsumer<Long, T> consumer) {
 		AtomicLong count = new AtomicLong(-1);
@@ -90,7 +90,7 @@ public class ImageGenerator {
 
 		iterationChanges.getAreAlreadyProcessed().forEach(p -> frame.setRGB(p.getX() + 3, p.getY() * -1 + 4, PROCESSED_COLOR));
 		iterationChanges.getAreProcessing().forEach(p -> frame.setRGB(p.getX() + 3, p.getY() * -1 + 4, PROCESSING_COLOR));
-		iterationChanges.getRoute().forEach((p -> frame.setRGB(p.getX() + 3, p.getY() * -1 + 4, ROUTE_COLOR)));
+//		iterationChanges.getRoute().forEach((p -> frame.setRGB(p.getX() + 3, p.getY() * -1 + 4, ROUTE_COLOR)));
 		return frame;
 	}
 

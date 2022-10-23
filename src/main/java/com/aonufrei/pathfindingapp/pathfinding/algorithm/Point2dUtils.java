@@ -2,11 +2,13 @@ package com.aonufrei.pathfindingapp.pathfinding.algorithm;
 
 import com.aonufrei.pathfindingapp.pathfinding.model.Node;
 import com.aonufrei.pathfindingapp.pathfinding.model.Point2d;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Service
 public class Point2dUtils implements PointUtils<Point2d> {
 
 	private static final int MAP_LEFT_BORDER = -3;
@@ -32,8 +34,6 @@ public class Point2dUtils implements PointUtils<Point2d> {
 
 	@Override
 	public double computePrice(Node<Point2d> prevNode, Point2d currentPoint, Point2d finishPoint) {
-//		return prevNode.getPrice() + distanceBetween(currentPoint, prevNode.getVertex())
-//				+ distanceBetween(currentPoint, finishPoint);
 		return distanceBetween(currentPoint, finishPoint);
 	}
 

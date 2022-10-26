@@ -2,6 +2,7 @@ package com.aonufrei.pathfindingapp.pathfinding.algorithm;
 
 import com.aonufrei.pathfindingapp.dto.ShortestPath;
 import com.aonufrei.pathfindingapp.exception.NoPathWasFoundException;
+import com.aonufrei.pathfindingapp.pathfinding.enums.Priority;
 import com.aonufrei.pathfindingapp.pathfinding.model.IterationChanges;
 import com.aonufrei.pathfindingapp.pathfinding.model.Node;
 import com.aonufrei.pathfindingapp.pathfinding.service.MapService;
@@ -19,11 +20,12 @@ import java.util.stream.Collectors;
 public class AStarAlgorithm<T> implements PathFindingAlgorithm<T> {
 
 	@Override
-	public ShortestPath<T> findShortestPath(T start, T finish, MapService<T> mapService) throws NoPathWasFoundException {
+	public ShortestPath<T> findShortestPath(T start, T finish, Priority priority, MapService<T> mapService) throws NoPathWasFoundException {
 		ShortestPath<T> shortestPath = new ShortestPath<>();
 		LinkedList<IterationChanges<T>> iterationChanges = new LinkedList<>();
 		Node<T> startNode = new Node<>(start, 0, mapService.distanceBetweenVertex(start, finish), null);
-		Queue<Node<T>> q = new PriorityQueue<>(Comparator.comparingDouble(Node::getPrice));
+		Comparator<Node<T>> comparatorFromPriority = getComparatorFromPriority(priority);
+		Queue<Node<T>> q = new PriorityQueue<>(comparatorFromPriority);
 		q.add(startNode);
 		iterationChanges.add(IterationChanges.createProcessingIteration(Collections.singletonList(start)));
 		Set<T> visited = new HashSet<>();
@@ -54,6 +56,17 @@ public class AStarAlgorithm<T> implements PathFindingAlgorithm<T> {
 			q.addAll(neighbours);
 		}
 		throw new NoPathWasFoundException("No path was found");
+	}
+
+	Comparator<Node<T>> getComparatorFromPriority(Priority priority) {
+		switch (priority) {
+			case SPEED:
+				return Comparator.comparingDouble(f -> f.getPrice() + f.getDistanceToFinish());
+			case QUALITY:
+				return Comparator.comparingDouble(Node::getPrice);
+			default:
+				throw new RuntimeException("Priority is not supported");
+		}
 	}
 
 	private LinkedList<T> traverseToRoot(Node<T> node) {

@@ -8,9 +8,9 @@ import com.aonufrei.pathfindingapp.exception.NoPathWasFoundException;
 import com.aonufrei.pathfindingapp.exception.PathfindingRequestValidationException;
 import com.aonufrei.pathfindingapp.pathfinding.algorithm.GridMapPathfindingAlgorithm;
 import com.aonufrei.pathfindingapp.pathfinding.algorithm.PathFindingAlgorithm;
+import com.aonufrei.pathfindingapp.pathfinding.enums.Priority;
 import com.aonufrei.pathfindingapp.pathfinding.model.Point2d;
 import com.aonufrei.pathfindingapp.pathfinding.service.GridMapService;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
 
@@ -30,14 +30,15 @@ public class PathfindingRestService {
 		this.mapper = mapper;
 	}
 
-	public PathfindingResponse<ShortestPath<Point2d>> getShortestPathInGridMap(GridMapPathfindingRequest request) {
+	public PathfindingResponse<ShortestPath<Point2d>> getShortestPathInGridMap(Priority priority, GridMapPathfindingRequest request) {
 		validateGridMapPathfindingRequest(request);
 
 		GridMapService gridMapService = new GridMapService(request.getGridMapInfo());
 
 		PathfindingResponse<ShortestPath<Point2d>> response;
 		try {
-			ShortestPath<Point2d> shortestPath = pathFindingAlgorithm.findShortestPath(request.getStartPoint(), request.getEndPoint(), gridMapService);
+			ShortestPath<Point2d> shortestPath = pathFindingAlgorithm.findShortestPath(request.getStartPoint(),
+					request.getEndPoint(), priority, gridMapService);
 			response = PathfindingResponse.<ShortestPath<Point2d>>builder()
 					.found(true)
 					.message("The route was successfully found")

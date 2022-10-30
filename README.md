@@ -4,7 +4,7 @@ Greetings! This API allows to find the shortest path between two points.
 
 It uses the A* algorithm.
 
-At this point the application support pathfinding on 2d map. You can also specify walls and check how the shortest path will be changed.
+At this point the application support pathfinding on 2d map. You can also specify walls and see how the shortest path will be changed.
 
 The UI for this backend application you can find [here](https://github.com/aonufrei/pathfinding-ui).
 

@@ -6,7 +6,7 @@ It uses the A* algorithm.
 
 At this point the application support pathfinding on 2d map. You can also specify walls and see how the shortest path will be changed.
 
-The UI for this backend application you can find [here](https://github.com/aonufrei/pathfinding-ui).
+The UI for this backend application can be found [here](https://github.com/aonufrei/pathfinding-ui).
 
 ## How to run the app
 

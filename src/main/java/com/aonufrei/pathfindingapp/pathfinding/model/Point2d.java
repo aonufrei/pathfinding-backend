@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.awt.*;
+
 @Data
 @EqualsAndHashCode
 @NoArgsConstructor
@@ -19,18 +21,18 @@ public class Point2d {
 	private Integer y;
 
 	@JsonIgnore
-	public Point2d copy() {
-		return new Point2d(x, y);
+	public Point2d copyWithXOffset(int value) {
+		return copyWithOffset(value, 0);
 	}
 
-	public Point2d withX(Integer x) {
-		this.x = x;
-		return this;
+	@JsonIgnore
+	public Point2d copyWithYOffset(int value) {
+		return copyWithOffset(0, value);
 	}
 
-	public Point2d withY(Integer y) {
-		this.y = y;
-		return this;
+	@JsonIgnore
+	public Point2d copyWithOffset(int x, int y) {
+		return new Point2d(this.x + x, this.y + y);
 	}
 
 }

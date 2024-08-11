@@ -6,29 +6,21 @@ import com.aonufrei.pathfindingapp.dto.PathfindingResponse;
 import com.aonufrei.pathfindingapp.dto.ShortestPath;
 import com.aonufrei.pathfindingapp.exception.NoPathWasFoundException;
 import com.aonufrei.pathfindingapp.exception.PathfindingRequestValidationException;
-import com.aonufrei.pathfindingapp.pathfinding.algorithm.GridMapPathfindingAlgorithm;
 import com.aonufrei.pathfindingapp.pathfinding.algorithm.PathFindingAlgorithm;
 import com.aonufrei.pathfindingapp.pathfinding.enums.Priority;
 import com.aonufrei.pathfindingapp.pathfinding.model.Point2d;
 import com.aonufrei.pathfindingapp.pathfinding.service.GridMapService;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.logging.LogManager;
-import java.util.logging.Logger;
-
 @Service
+@AllArgsConstructor
 public class PathfindingRestService {
 
-	private final static Logger log = LogManager.getLogManager().getLogger(PathfindingRestService.class.getName());
+	private static final int MIN_MAP_CORD = -50;
+	private static final int MAX_MAP_CORD = 50;
+
 	private final PathFindingAlgorithm<Point2d> pathFindingAlgorithm;
-
-	private final ObjectMapper mapper;
-
-	public PathfindingRestService(GridMapPathfindingAlgorithm pathFindingAlgorithm, ObjectMapper mapper) {
-		this.pathFindingAlgorithm = pathFindingAlgorithm;
-		this.mapper = mapper;
-	}
 
 	public PathfindingResponse<ShortestPath<Point2d>> getShortestPathInGridMap(Priority priority, GridMapPathfindingRequest request) {
 		validateGridMapPathfindingRequest(request);
@@ -96,14 +88,14 @@ public class PathfindingRestService {
 			throw new PathfindingRequestValidationException("map_info is not valid");
 		}
 
-		if (gridMapInfo.getLeftBorder() < -50
-				|| gridMapInfo.getLeftBorder() > 50
-				|| gridMapInfo.getRightBorder() > 50
-				|| gridMapInfo.getRightBorder() < -50
-				|| gridMapInfo.getTopBorder() > 50
-				|| gridMapInfo.getTopBorder() < -50
-				|| gridMapInfo.getBottomBorder() > 50
-				|| gridMapInfo.getBottomBorder() < -50) {
+		if (gridMapInfo.getLeftBorder() < MIN_MAP_CORD
+				|| gridMapInfo.getLeftBorder() > MAX_MAP_CORD
+				|| gridMapInfo.getRightBorder() > MAX_MAP_CORD
+				|| gridMapInfo.getRightBorder() < MIN_MAP_CORD
+				|| gridMapInfo.getTopBorder() > MAX_MAP_CORD
+				|| gridMapInfo.getTopBorder() < MIN_MAP_CORD
+				|| gridMapInfo.getBottomBorder() > MAX_MAP_CORD
+				|| gridMapInfo.getBottomBorder() < MIN_MAP_CORD) {
 			throw new PathfindingRequestValidationException("map bounds are too big");
 		}
 

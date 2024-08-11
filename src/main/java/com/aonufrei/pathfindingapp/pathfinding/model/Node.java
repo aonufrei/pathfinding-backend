@@ -19,9 +19,4 @@ public class Node<T> {
 
 	private Node<T> parent;
 
-	public Node(T vertex, Node<T> parent) {
-		this.vertex = vertex;
-		this.parent = parent;
-	}
-
 }

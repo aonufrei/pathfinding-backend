@@ -2,6 +2,8 @@ package com.aonufrei.pathfindingapp.pathfinding.service;
 
 import com.aonufrei.pathfindingapp.dto.GridMapInfo;
 import com.aonufrei.pathfindingapp.pathfinding.model.Point2d;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.HashSet;
 import java.util.List;
@@ -9,6 +11,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class GridMapService implements MapService<Point2d> {
 
 	private final int leftBorder;
@@ -19,6 +22,7 @@ public class GridMapService implements MapService<Point2d> {
 
 	private final int bottomBorder;
 
+	@Setter
 	private Set<Point2d> walls = new HashSet<>();
 
 
@@ -34,14 +38,14 @@ public class GridMapService implements MapService<Point2d> {
 	@Override
 	public List<Point2d> findNeighboursOfVertex(Point2d point) {
 		return Stream.of(
-				point.copy().withX(point.getX() + 1),
-				point.copy().withX(point.getX() - 1),
-				point.copy().withY(point.getY() + 1),
-				point.copy().withY(point.getY() - 1),
-				point.copy().withX(point.getX() + 1).withY(point.getY() + 1),
-				point.copy().withX(point.getX() + 1).withY(point.getY() - 1),
-				point.copy().withX(point.getX() - 1).withY(point.getY() + 1),
-				point.copy().withX(point.getX() - 1).withY(point.getY() - 1)
+				point.copyWithXOffset(1),
+				point.copyWithXOffset(-1),
+				point.copyWithYOffset(1),
+				point.copyWithYOffset(-1),
+				point.copyWithOffset(1, 1),
+				point.copyWithOffset(1, -1),
+				point.copyWithOffset(-1, 1),
+				point.copyWithOffset(-1, -1)
 		).filter(this::isInMap).filter(p -> !walls.contains(p)).collect(Collectors.toList());
 	}
 
@@ -62,29 +66,5 @@ public class GridMapService implements MapService<Point2d> {
 	@Override
 	public Double distanceBetweenVertex(Point2d p1, Point2d p2) {
 		return Math.sqrt(Math.pow(p2.getX() - p1.getX(), 2) + Math.pow(p2.getY() - p1.getY(), 2));
-	}
-
-	public int getLeftBorder() {
-		return leftBorder;
-	}
-
-	public int getTopBorder() {
-		return topBorder;
-	}
-
-	public int getRightBorder() {
-		return rightBorder;
-	}
-
-	public int getBottomBorder() {
-		return bottomBorder;
-	}
-
-	public void setWalls(Set<Point2d> walls) {
-		this.walls = walls;
-	}
-
-	public Set<Point2d> getWalls() {
-		return walls;
 	}
 }

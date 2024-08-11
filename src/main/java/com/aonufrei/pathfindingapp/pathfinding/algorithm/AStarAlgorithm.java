@@ -15,17 +15,15 @@ import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Set;
-import java.util.stream.Collectors;
 
-public class AStarAlgorithm<T> implements PathFindingAlgorithm<T> {
+public abstract class AStarAlgorithm<T> implements PathFindingAlgorithm<T> {
 
 	@Override
 	public ShortestPath<T> findShortestPath(T start, T finish, Priority priority, MapService<T> mapService) throws NoPathWasFoundException {
 		ShortestPath<T> shortestPath = new ShortestPath<>();
 		LinkedList<IterationChanges<T>> iterationChanges = new LinkedList<>();
 		Node<T> startNode = new Node<>(start, 0, mapService.distanceBetweenVertex(start, finish), null);
-		Comparator<Node<T>> comparatorFromPriority = getComparatorFromPriority(priority);
-		Queue<Node<T>> q = new PriorityQueue<>(comparatorFromPriority);
+		Queue<Node<T>> q = new PriorityQueue<>(getComparatorFromPriority(priority));
 		q.add(startNode);
 		iterationChanges.add(IterationChanges.createProcessingIteration(Collections.singletonList(start)));
 		Set<T> visited = new HashSet<>();
@@ -42,8 +40,8 @@ public class AStarAlgorithm<T> implements PathFindingAlgorithm<T> {
 					.filter(v -> !visited.contains(v))
 					.filter(v -> q.stream().noneMatch(qn -> qn.getVertex().equals(v)))
 					.map(v -> new Node<>(v, currentNode.getPrice() + mapService.computePrice(currentVertex, v, finish), mapService.distanceBetweenVertex(v, finish), currentNode))
-					.collect(Collectors.toList());
-			iteration.getAreProcessing().addAll(neighbours.stream().map(Node::getVertex).collect(Collectors.toList()));
+					.toList();
+			iteration.getAreProcessing().addAll(neighbours.stream().map(Node::getVertex).toList());
 			for (Node<T> neighbour: neighbours) {
 				if (neighbour.getVertex().equals(finish)) {
 					LinkedList<T> route = traverseToRoot(neighbour);
@@ -59,14 +57,10 @@ public class AStarAlgorithm<T> implements PathFindingAlgorithm<T> {
 	}
 
 	Comparator<Node<T>> getComparatorFromPriority(Priority priority) {
-		switch (priority) {
-			case SPEED:
-				return Comparator.comparingDouble(f -> f.getPrice() + f.getDistanceToFinish());
-			case QUALITY:
-				return Comparator.comparingDouble(Node::getPrice);
-			default:
-				throw new RuntimeException("Priority is not supported");
-		}
+		return switch (priority) {
+			case SPEED -> Comparator.comparingDouble(f -> f.getPrice() + f.getDistanceToFinish());
+			case QUALITY -> Comparator.comparingDouble(Node::getPrice);
+		};
 	}
 
 	private LinkedList<T> traverseToRoot(Node<T> node) {
